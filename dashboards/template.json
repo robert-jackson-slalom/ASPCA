@@ -1,0 +1,250 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dashboards_801baf50_c543_4d94_bbe4_bf3be872a799_name": {
+            "defaultValue": "801baf50-c543-4d94-bbe4-bf3be872a799",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Portal/dashboards",
+            "apiVersion": "2020-09-01-preview",
+            "name": "[parameters('dashboards_801baf50_c543_4d94_bbe4_bf3be872a799_name')]",
+            "location": "eastus2",
+            "tags": {
+                "hidden-title": "Sparky DEV",
+                "CREATOR": "Thomas Edmondson",
+                "DATA PROFILE": "INTERNAL",
+                "ENVIRONMENT": "DEV"
+            },
+            "properties": {
+                "lenses": [
+                    {
+                        "order": 0,
+                        "parts": [
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 5,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {}
+                                    ],
+                                    "type": "Extension/SqlAzureExtension/PartType/MySqlServerAssetPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 9,
+                                    "y": 0,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 17,
+                                    "y": 0,
+                                    "rowSpan": 7,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/BrowseResourceGroupPinnedPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 5,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {}
+                                    ],
+                                    "type": "Extension/SqlAzureExtension/PartType/ServerPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {
+                                        "content": {}
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 5,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {
+                                        "content": {}
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 9,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {
+                                        "content": {}
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 12,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {
+                                        "content": {}
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 6,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 2,
+                                    "y": 6,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 6,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 9,
+                                    "y": 6,
+                                    "rowSpan": 2,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/ResourcePart"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "metadata": {
+                    "model": {}
+                }
+            }
+        }
+    ]
+}

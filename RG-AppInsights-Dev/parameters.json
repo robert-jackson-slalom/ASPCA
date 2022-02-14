@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "components_AppInsights_SparkyInsights_name": {
+            "value": null
+        },
+        "actionGroups_Application_Insights_Smart_Detection_name": {
+            "value": null
+        },
+        "dashboards_c3fce19a_1972_4f0a_9699_a8827a2a60a4_dashboard_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___appinsights_sparkyinsights_name": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_fd8ea382_65ba_4762_b92b_0bcf7f50f797_EUS2_externalid": {
+            "value": null
+        }
+    }
+}

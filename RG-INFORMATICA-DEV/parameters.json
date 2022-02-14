@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccounts_sainformaticadev01_name": {
+            "value": null
+        },
+        "virtualMachines_VM_INFORMATICA_DEV_01_name": {
+            "value": null
+        },
+        "networkInterfaces_vm_informatica_dev_0461_name": {
+            "value": null
+        },
+        "networkSecurityGroups_VM_INFORMATICA_DEV_01_nsg_name": {
+            "value": null
+        },
+        "virtualNetworks_SPK_DEV_RG_vnet_externalid": {
+            "value": null
+        }
+    }
+}

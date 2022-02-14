@@ -1,0 +1,835 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "components_AppInsights_SparkyInsights_name": {
+            "defaultValue": "AppInsights-SparkyInsights",
+            "type": "String"
+        },
+        "actionGroups_Application_Insights_Smart_Detection_name": {
+            "defaultValue": "Application Insights Smart Detection",
+            "type": "String"
+        },
+        "dashboards_c3fce19a_1972_4f0a_9699_a8827a2a60a4_dashboard_name": {
+            "defaultValue": "c3fce19a-1972-4f0a-9699-a8827a2a60a4-dashboard",
+            "type": "String"
+        },
+        "smartdetectoralertrules_failure_anomalies___appinsights_sparkyinsights_name": {
+            "defaultValue": "failure anomalies - appinsights-sparkyinsights",
+            "type": "String"
+        },
+        "workspaces_DefaultWorkspace_fd8ea382_65ba_4762_b92b_0bcf7f50f797_EUS2_externalid": {
+            "defaultValue": "/subscriptions/fd8ea382-65ba-4762-b92b-0bcf7f50f797/resourceGroups/DefaultResourceGroup-EUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-fd8ea382-65ba-4762-b92b-0bcf7f50f797-EUS2",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('actionGroups_Application_Insights_Smart_Detection_name')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "SmartDetect",
+                "enabled": true,
+                "emailReceivers": [],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "eventHubReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": [],
+                "armRoleReceivers": [
+                    {
+                        "name": "Monitoring Contributor",
+                        "roleId": "749f88d5-cbae-40b8-bcfc-e573ddc772fa",
+                        "useCommonAlertSchema": true
+                    },
+                    {
+                        "name": "Monitoring Reader",
+                        "roleId": "43d0d8ad-25c7-4714-9337-8ba259a9fe05",
+                        "useCommonAlertSchema": true
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[parameters('components_AppInsights_SparkyInsights_name')]",
+            "location": "eastus2",
+            "tags": {
+                "CREATOR": "Thomas Edmondson",
+                "ENVIRONMENT": "DEV",
+                "DATA PROFILE": "INTERNAL"
+            },
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "Flow_Type": "Redfield",
+                "Request_Source": "IbizaAIExtension",
+                "RetentionInDays": 90,
+                "WorkspaceResourceId": "[parameters('workspaces_DefaultWorkspace_fd8ea382_65ba_4762_b92b_0bcf7f50f797_EUS2_externalid')]",
+                "IngestionMode": "LogAnalytics",
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Portal/dashboards",
+            "apiVersion": "2020-09-01-preview",
+            "name": "[parameters('dashboards_c3fce19a_1972_4f0a_9699_a8827a2a60a4_dashboard_name')]",
+            "location": "eastus2",
+            "tags": {
+                "hidden-title": "AppInsights-SparkyInsights Dashboard"
+            },
+            "properties": {
+                "lenses": [
+                    {
+                        "order": 0,
+                        "parts": [
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 2
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/AspNetOverviewPinnedPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 2,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/ProactiveDetectionAsyncPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 3,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/QuickPulseButtonSmallPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/AvailabilityNavButtonPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 5,
+                                    "y": 0,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/AppMapButtonPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [],
+                                    "type": "Extension[azure]/HubsExtension/PartType/MarkdownPart",
+                                    "settings": {
+                                        "content": {
+                                            "settings": {
+                                                "content": "# Usage"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 3,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/UsageUsersOverviewPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [],
+                                    "type": "Extension[azure]/HubsExtension/PartType/MarkdownPart",
+                                    "settings": {
+                                        "content": {
+                                            "settings": {
+                                                "content": "# Reliability"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 7,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/CuratedBladeFailuresPinnedPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 8,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [],
+                                    "type": "Extension[azure]/HubsExtension/PartType/MarkdownPart",
+                                    "settings": {
+                                        "content": {
+                                            "settings": {
+                                                "content": "# Responsiveness\r\n"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 11,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/CuratedBladePerformancePinnedPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 12,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 3
+                                },
+                                "metadata": {
+                                    "inputs": [],
+                                    "type": "Extension[azure]/HubsExtension/PartType/MarkdownPart",
+                                    "settings": {
+                                        "content": {
+                                            "settings": {
+                                                "content": "# Browser"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 15,
+                                    "y": 1,
+                                    "rowSpan": 1,
+                                    "colSpan": 1
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {},
+                                        {},
+                                        {},
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/AppInsightsExtension/PartType/MetricsExplorerBladePinnedPart"
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 8,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 12,
+                                    "y": 2,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 5,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 5,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 8,
+                                    "y": 5,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 12,
+                                    "y": 5,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 0,
+                                    "y": 8,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 4,
+                                    "y": 8,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            },
+                            {
+                                "position": {
+                                    "x": 8,
+                                    "y": 8,
+                                    "rowSpan": 3,
+                                    "colSpan": 4
+                                },
+                                "metadata": {
+                                    "inputs": [
+                                        {},
+                                        {}
+                                    ],
+                                    "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                                    "settings": {}
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/degradationindependencyduration')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "degradationindependencyduration",
+                    "DisplayName": "Degradation in dependency duration",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/degradationinserverresponsetime')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "degradationinserverresponsetime",
+                    "DisplayName": "Degradation in server response time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/digestMailConfiguration')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "digestMailConfiguration",
+                    "DisplayName": "Digest Mail Configuration",
+                    "Description": "This rule describes the digest mail preferences",
+                    "HelpUrl": "www.homail.com",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_billingdatavolumedailyspikeextension')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_billingdatavolumedailyspikeextension",
+                    "DisplayName": "Abnormal rise in daily data volume (preview)",
+                    "Description": "This detection rule automatically analyzes the billing data generated by your application, and can warn you about an unusual increase in your application's billing costs",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/billing-data-volume-daily-spike.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_canaryextension')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_canaryextension",
+                    "DisplayName": "Canary extension",
+                    "Description": "Canary extension",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_exceptionchangeextension')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_exceptionchangeextension",
+                    "DisplayName": "Abnormal rise in exception volume (preview)",
+                    "Description": "This detection rule automatically analyzes the exceptions thrown in your application, and can warn you about unusual patterns in your exception telemetry.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/abnormal-rise-in-exception-volume.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_memoryleakextension')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_memoryleakextension",
+                    "DisplayName": "Potential memory leak detected (preview)",
+                    "Description": "This detection rule automatically analyzes the memory consumption of each process in your application, and can warn you about potential memory leaks or increased memory consumption.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/memory-leak.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_securityextensionspackage')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_securityextensionspackage",
+                    "DisplayName": "Potential security issue detected (preview)",
+                    "Description": "This detection rule automatically analyzes the telemetry generated by your application and detects potential security issues.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/application-security-detection-pack.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/extension_traceseveritydetector')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_traceseveritydetector",
+                    "DisplayName": "Degradation in trace severity ratio (preview)",
+                    "Description": "This detection rule automatically analyzes the trace logs emitted from your application, and can warn you about unusual patterns in the severity of your trace telemetry.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/degradation-in-trace-severity-ratio.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/longdependencyduration')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "longdependencyduration",
+                    "DisplayName": "Long dependency duration",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/migrationToAlertRulesCompleted')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "migrationToAlertRulesCompleted",
+                    "DisplayName": "Migration To Alert Rules Completed",
+                    "Description": "A configuration that controls the migration state of Smart Detection to Smart Alerts",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": false,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": false,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/slowpageloadtime')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "slowpageloadtime",
+                    "DisplayName": "Slow page load time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_AppInsights_SparkyInsights_name'), '/slowserverresponsetime')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "slowserverresponsetime",
+                    "DisplayName": "Slow server response time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('smartdetectoralertrules_failure_anomalies___appinsights_sparkyinsights_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]",
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+            ],
+            "properties": {
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
+                },
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('components_AppInsights_SparkyInsights_name'))]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+                    ]
+                }
+            }
+        }
+    ]
+}

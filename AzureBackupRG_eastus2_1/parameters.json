@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "restorePointCollections_AzureBackup_SPKRJDEVVM01_228699805995901_name": {
+            "value": null
+        },
+        "restorePointCollections_AzureBackup_VM_INFORMATICA_DEV_01_228699570530646_name": {
+            "value": null
+        },
+        "virtualMachines_SPKRJDEVVM01_externalid": {
+            "value": null
+        },
+        "virtualMachines_VM_INFORMATICA_DEV_01_externalid": {
+            "value": null
+        }
+    }
+}

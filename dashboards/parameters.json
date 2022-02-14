@@ -1,0 +1,9 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dashboards_801baf50_c543_4d94_bbe4_bf3be872a799_name": {
+            "value": null
+        }
+    }
+}

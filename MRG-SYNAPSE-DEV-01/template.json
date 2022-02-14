@@ -1,0 +1,921 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
+        },
+        "servers_wksp_synapse_dev_01_name": {
+            "defaultValue": "wksp-synapse-dev-01",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[parameters('servers_wksp_synapse_dev_01_name')]",
+            "location": "eastus2",
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "DATA PROFILE": "INTERNAL",
+                "ENVIRONMENT": "DEV"
+            },
+            "kind": "v12.0,analytics",
+            "properties": {
+                "administratorLogin": "spk-dev-mssql-admin",
+                "version": "12.0",
+                "publicNetworkAccess": "Enabled",
+                "administrators": {
+                    "administratorType": "ActiveDirectory",
+                    "principalType": "Group",
+                    "login": "Ilya.Koyfman@aspca.org",
+                    "sid": "ac05ac47-c193-4228-a813-60718148434d",
+                    "tenantId": "fcf2ac97-6f3c-48da-912a-7a446e6b4f54"
+                },
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/administrators",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/ActiveDirectory')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "Ilya.Koyfman@aspca.org",
+                "sid": "ac05ac47-c193-4228-a813-60718148434d",
+                "tenantId": "fcf2ac97-6f3c-48da-912a-7a446e6b4f54"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/azureADOnlyAuthentications",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "azureADOnlyAuthentication": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/connectionPolicies",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/default')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "connectionType": "Default"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "DATA PROFILE": "INTERNAL",
+                "ENVIRONMENT": "DEV"
+            },
+            "sku": {
+                "name": "DataWarehouse",
+                "tier": "DataWarehouse",
+                "capacity": 900
+            },
+            "kind": "v12.0,user,datawarehouse,gen2,analytics",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 263882790666240,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/fd8ea382-65ba-4762-b92b-0bcf7f50f797/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/devOpsAuditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged",
+                "autoRotationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/extendedAuditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/allowAll')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "255.255.255.255"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/ClientIPAddress-2021-11-30-10-16-55')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "72.229.109.179",
+                "endIpAddress": "72.229.109.179"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Prannoy''s Laptop')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "173.70.67.159",
+                "endIpAddress": "173.70.67.159"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/securityAlertPolicies",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/largerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 22,
+                "maxResourcePercentPerRequest": 22,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/mediumrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 10,
+                "maxResourcePercentPerRequest": 10,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/smallrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 3,
+                "maxResourcePercentPerRequest": 3,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc10')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 0.4,
+                "maxResourcePercentPerRequest": 0.4,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc20')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 0.8,
+                "maxResourcePercentPerRequest": 0.8,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc30')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 1.6,
+                "maxResourcePercentPerRequest": 1.6,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc40')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 3.2,
+                "maxResourcePercentPerRequest": 3.2,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc50')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 6.4,
+                "maxResourcePercentPerRequest": 6.4,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc60')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 12.8,
+                "maxResourcePercentPerRequest": 12.8,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc70')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 25.6,
+                "maxResourcePercentPerRequest": 25.6,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc80')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 51.2,
+                "maxResourcePercentPerRequest": 51.2,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/xlargerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "minResourcePercent": 0,
+                "maxResourcePercent": 100,
+                "minResourcePercentPerRequest": 70,
+                "maxResourcePercentPerRequest": 70,
+                "importance": "normal",
+                "queryExecutionTimeout": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/largerc/largerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'largerc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "largerc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/mediumrc/mediumrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'mediumrc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "mediumrc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/smallrc/smallrc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'smallrc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "smallrc",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc10/staticrc10')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc10')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc10",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc20/staticrc20')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc20')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc20",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc30/staticrc30')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc30')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc30",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc40/staticrc40')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc40')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc40",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc50/staticrc50')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc50')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc50",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc60/staticrc60')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc60')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc60",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc70/staticrc70')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc70')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc70",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/staticrc80/staticrc80')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'staticrc80')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "staticrc80",
+                "importance": "normal"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/workloadGroups/workloadClassifiers",
+            "apiVersion": "2021-05-01-preview",
+            "name": "[concat(parameters('servers_wksp_synapse_dev_01_name'), '/poolsynapsedev01/xlargerc/xlargerc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases/workloadGroups', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01', 'xlargerc')]",
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_wksp_synapse_dev_01_name'), 'poolsynapsedev01')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_wksp_synapse_dev_01_name'))]"
+            ],
+            "properties": {
+                "memberName": "xlargerc",
+                "importance": "normal"
+            }
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "restorePointCollections_AzureBackup_SPKRJDEVVM01_228699805995901_name": {
+            "defaultValue": "AzureBackup_SPKRJDEVVM01_228699805995901",
+            "type": "String"
+        },
+        "restorePointCollections_AzureBackup_VM_INFORMATICA_DEV_01_228699570530646_name": {
+            "defaultValue": "AzureBackup_VM-INFORMATICA-DEV-01_228699570530646",
+            "type": "String"
+        },
+        "virtualMachines_SPKRJDEVVM01_externalid": {
+            "defaultValue": "/subscriptions/fd8ea382-65ba-4762-b92b-0bcf7f50f797/resourceGroups/RG-SPK-RJ-DEV-01/providers/Microsoft.Compute/virtualMachines/SPKRJDEVVM01",
+            "type": "String"
+        },
+        "virtualMachines_VM_INFORMATICA_DEV_01_externalid": {
+            "defaultValue": "/subscriptions/fd8ea382-65ba-4762-b92b-0bcf7f50f797/resourceGroups/RG-INFORMATICA-DEV/providers/Microsoft.Compute/virtualMachines/VM-INFORMATICA-DEV-01",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/restorePointCollections",
+            "apiVersion": "2021-07-01",
+            "name": "[parameters('restorePointCollections_AzureBackup_SPKRJDEVVM01_228699805995901_name')]",
+            "location": "eastus2",
+            "properties": {
+                "source": {
+                    "id": "[parameters('virtualMachines_SPKRJDEVVM01_externalid')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/restorePointCollections",
+            "apiVersion": "2021-07-01",
+            "name": "[parameters('restorePointCollections_AzureBackup_VM_INFORMATICA_DEV_01_228699570530646_name')]",
+            "location": "eastus2",
+            "properties": {
+                "source": {
+                    "id": "[parameters('virtualMachines_VM_INFORMATICA_DEV_01_externalid')]"
+                }
+            }
+        }
+    ]
+}

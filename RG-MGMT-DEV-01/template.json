@@ -1,0 +1,272 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_VM_JUMPBOX_DEV_01_name": {
+            "defaultValue": "VM-JUMPBOX-DEV-01",
+            "type": "String"
+        },
+        "bastionHosts_SPK_DEV_RG_vnet_bastion_name": {
+            "defaultValue": "SPK-DEV-RG-vnet-bastion",
+            "type": "String"
+        },
+        "publicIPAddresses_SPK_DEV_RG_vnet_ip_name": {
+            "defaultValue": "SPK-DEV-RG-vnet-ip",
+            "type": "String"
+        },
+        "networkInterfaces_vm_jumpbox_dev_01950_name": {
+            "defaultValue": "vm-jumpbox-dev-01950",
+            "type": "String"
+        },
+        "publicIPAddresses_VM_JUMPBOX_DEV_01_ip_name": {
+            "defaultValue": "VM-JUMPBOX-DEV-01-ip",
+            "type": "String"
+        },
+        "networkSecurityGroups_VM_JUMPBOX_DEV_01_nsg_name": {
+            "defaultValue": "VM-JUMPBOX-DEV-01-nsg",
+            "type": "String"
+        },
+        "virtualNetworks_SPK_DEV_RG_vnet_externalid": {
+            "defaultValue": "/subscriptions/fd8ea382-65ba-4762-b92b-0bcf7f50f797/resourceGroups/SPK-DEV-RG/providers/Microsoft.Network/virtualNetworks/SPK-DEV-RG-vnet",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('networkSecurityGroups_VM_JUMPBOX_DEV_01_nsg_name')]",
+            "location": "eastus2",
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "ENVIRONMENT": "DEV",
+                "DATA PROFILE": "INTERNAL"
+            },
+            "properties": {
+                "securityRules": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('publicIPAddresses_SPK_DEV_RG_vnet_ip_name')]",
+            "location": "eastus2",
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "DATA PROFILE": "EXTERNAL",
+                "ENVIRONMENT": "DEV"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
+            "properties": {
+                "ipAddress": "52.167.182.78",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('publicIPAddresses_VM_JUMPBOX_DEV_01_ip_name')]",
+            "location": "eastus2",
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "ENVIRONMENT": "DEV",
+                "DATA PROFILE": "INTERNAL"
+            },
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "40.84.22.15",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-07-01",
+            "name": "[parameters('virtualMachines_VM_JUMPBOX_DEV_01_name')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_jumpbox_dev_01950_name'))]"
+            ],
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "ENVIRONMENT": "DEV",
+                "DATA PROFILE": "INTERNAL"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-datacenter-gensecond",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_VM_JUMPBOX_DEV_01_name'), '_disk1_799a3528ac79421eae7b0299d573cfe2')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "writeAcceleratorEnabled": false,
+                        "managedDisk": {
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_VM_JUMPBOX_DEV_01_name'), '_disk1_799a3528ac79421eae7b0299d573cfe2'))]"
+                        }
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_VM_JUMPBOX_DEV_01_name'), '_data1')]",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "writeAcceleratorEnabled": false,
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks', 'vm-jumpbox-dev-01_data1')]"
+                            },
+                            "toBeDetached": false
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "VM-JUMPBOX-DEV-",
+                    "adminUsername": "spk-dev-win-admin",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault",
+                            "enableHotpatching": false
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vm_jumpbox_dev_01950_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2021-07-01",
+            "name": "[concat(parameters('virtualMachines_VM_JUMPBOX_DEV_01_name'), '/AzureNetworkWatcherExtension')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_VM_JUMPBOX_DEV_01_name'))]"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Azure.NetworkWatcher",
+                "type": "NetworkWatcherAgentWindows",
+                "typeHandlerVersion": "1.4"
+            }
+        },
+        {
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('bastionHosts_SPK_DEV_RG_vnet_bastion_name')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SPK_DEV_RG_vnet_ip_name'))]"
+            ],
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "DATA PROFILE": "EXTERNAL",
+                "ENVIRONMENT": "DEV"
+            },
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "dnsName": "bst-41d07691-2d2e-4c16-abef-6d252ef22282.bastion.azure.com",
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SPK_DEV_RG_vnet_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_SPK_DEV_RG_vnet_externalid'), '/subnets/AzureBastionSubnet')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('networkInterfaces_vm_jumpbox_dev_01950_name')]",
+            "location": "eastus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_VM_JUMPBOX_DEV_01_ip_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_VM_JUMPBOX_DEV_01_nsg_name'))]"
+            ],
+            "tags": {
+                "CREATOR": "Chan Johnson",
+                "ENVIRONMENT": "DEV",
+                "DATA PROFILE": "INTERNAL"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.5",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_VM_JUMPBOX_DEV_01_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_SPK_DEV_RG_vnet_externalid'), '/subnets/default')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_VM_JUMPBOX_DEV_01_nsg_name'))]"
+                }
+            }
+        }
+    ]
+}
